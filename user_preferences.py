@@ -5,30 +5,9 @@ from typing import Optional
 
 @dataclass
 class UserPreference:
-    investment_pct: int
     password: str
     sheet_url: str
-    mdd_speculative_pct: int
-    mdd_growth_pct: int
-    mdd_core_pct: int
-
-    cagr_speculative_pct: Optional[float] = None
-    cagr_growth_pct: Optional[float] = None
-    cagr_core_pct: Optional[float] = None 
-    recover_speculative_pct: Optional[float] = None
-    recover_growth_pct: Optional[float] = None
-    recover_core_pct: Optional[float] = None
-
-    def compute_growth_metrics(self):
-        def calc(mdd_pct: int):
-            recovery_multiplier = 1 / (1 + mdd_pct / 100)
-            cagr = recovery_multiplier ** (1 / 3) - 1
-            recovery_pct = (recovery_multiplier - 1) * 100
-            return round(cagr * 100, 2), round(recovery_pct, 2)
-
-        self.cagr_speculative_pct, self.recover_speculative_pct = calc(self.mdd_speculative_pct)
-        self.cagr_growth_pct, self.recover_growth_pct = calc(self.mdd_growth_pct)
-        self.cagr_core_pct, self.recover_core_pct = calc(self.mdd_core_pct)
+    pe_timeframe_month: int
 
 def convert_to_csv_url(sheet_url: str) -> str:
     sheet_url = sheet_url.strip()
@@ -64,46 +43,16 @@ def get_user_preferences() -> UserPreference:
         type="password"
     )
 
-    # Investment allocation slider
+    # PE Time Frame
     st.sidebar.markdown("### 🧑‍💼 Investment Mode: Risk-Off/On")
-    investment_pct = st.sidebar.slider(
-        label="Set Investment Portion (%)",
-        min_value=25,
-        max_value=75,
-        value=50,
-        step=1,
-        help="Investment portion includes Core, Growth, and Speculative assets. Reserve portion includes Cash, Bond, and Gold."
+    pe_timeframe_month = st.sidebar.slider(
+        label="Set PE Time Frame (months)",
+        min_value=6,
+        max_value=60,
+        value=36,
+        step=6,
+        help="Statistical historical time frame"
     )
-
-    # MDD inputs
-    st.sidebar.markdown("### 📉 Maximum Drawdown (%MDD)")
-    mdd_core_pct = st.sidebar.number_input(
-        "Core Assets", value=-25, min_value=-95, max_value=-5, step=5
-    )
-    mdd_growth_pct = st.sidebar.number_input(
-        "Growth Assets", value=-50, min_value=-95, max_value=-5, step=5
-    )
-    mdd_speculative_pct = st.sidebar.number_input(
-        "Speculative Assets", value=-70, min_value=-95, max_value=-5, step=5
-    )
-
-    # Create UserPreference object
-    prefs = UserPreference(
-        investment_pct=investment_pct,
-        password=password,
-        sheet_url=sheet_url,
-        mdd_speculative_pct=mdd_speculative_pct,
-        mdd_growth_pct=mdd_growth_pct,
-        mdd_core_pct=mdd_core_pct
-    )
-    prefs.compute_growth_metrics()
-
-    # Display recovery metrics
-    st.sidebar.markdown("### 📈 Recovery Rate from MDD")
-    st.sidebar.caption("ℹ️ Assumes price recovers within 3 years.")
-    st.sidebar.write(f"Core: CAGR {round(prefs.cagr_core_pct)}%, full recovery {round(prefs.recover_core_pct)}%")
-    st.sidebar.write(f"Growth: CAGR {round(prefs.cagr_growth_pct)}%, full recovery {round(prefs.recover_growth_pct)}%")
-    st.sidebar.write(f"Speculative: CAGR {round(prefs.cagr_speculative_pct)}%, full recovery {round(prefs.recover_speculative_pct)}%")
 
     return prefs
 

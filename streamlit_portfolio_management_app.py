@@ -1,58 +1,56 @@
-#streamlit_portfolio_management_app.py
 import streamlit as st
+import yfinance as yf
 import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
 
-from asset_data import AssetData
-from load_assets import load_assets_from_google_sheet
-from fetch_yfinance import can_fetch_data
-from portfolio_value import enrich_assets, summarize_assets, calculate_portfolio_total, assign_weights
-from user_preferences import get_user_preferences, UserPreference
-from portfolio_proportion import assign_targets
-from position_size import assign_position_sizes
-from price_signal import assign_price_signals
-from portfolio_view import get_portfolio_df, show_portfolio_table, show_allocation_pie_chart, show_target_allocation_pie_chart
+st.title("3-Year P/E Ratio Percentile (Monthly Data)")
 
+# User input
+symbol = st.text_input("Enter stock symbol (e.g., AAPL)", value="AAPL")
 
+if symbol:
+    try:
+        # Set date range
+        end_date = datetime.today()
+        start_date = end_date - timedelta(days=3 * 365)
 
-# --- Streamlit Page Config ---
-st.set_page_config(page_title="Portfolio Management", layout="centered")
-st.title("🗂️ Portfolio Management")
+        # Fetch monthly price history
+        ticker = yf.Ticker(symbol)
+        hist = ticker.history(start=start_date.strftime('%Y-%m-%d'),
+                              end=end_date.strftime('%Y-%m-%d'),
+                              interval='1mo')
 
-# --- User Preferences ---
-user_pref = get_user_preferences()
+        info = ticker.info
+        trailing_eps = info.get('trailingEps')
 
-# --- Load Asset Data ---
-try:
-    assets = load_assets_from_google_sheet(user_pref.sheet_url)
-except Exception:
-    st.error("❌ Failed to load data from the provided Google Sheet. Using default sheet instead.")
-    assets = load_assets_from_google_sheet(st.secrets["google_sheet"]["url"])
+        if hist.empty:
+            st.warning("No historical price data available.")
+        elif trailing_eps in [None, 0]:
+            st.warning("Trailing EPS data is unavailable or zero.")
+        else:
+            # Calculate monthly P/E
+            hist = hist[hist['Close'] > 0]
+            hist['PE'] = hist['Close'] / trailing_eps
+            hist = hist[hist['PE'] < 1000]  # Filter outliers
 
-# --- Check Password and Fetch Data ---
-if user_pref.password == st.secrets["credentials"]["app_password"]:
-    st.success("🔓 Password Correct! Checking live data availability...")
-    if can_fetch_data():  # ✅ Check fetch readiness
-        with st.spinner("Fetching live prices and FX rates..."):
-            assets = enrich_assets(assets)
-    else:
-        st.error("❌ Unable to fetch live data. Falling back to static data.")
-else:
-    st.warning("🔒 Offline Mode: Using static data from Google Sheet.")
+            # Current P/E and percentile rank
+            pe_current = hist['PE'].iloc[-1]
+            pe_percentile_rank = np.round((hist['PE'] < pe_current).mean() * 100, 2)
 
-# --- Portfolio Calculations ---
-assets = summarize_assets(assets)
-total_thb = calculate_portfolio_total(assets)
-assign_weights(assets, total_thb)
+            # Percentile summary
+            percentiles = np.percentile(hist['PE'], [0, 10, 25, 50, 75, 90, 100])
+            percentile_df = pd.DataFrame({
+                'Percentile': ['0th', '10th', '25th', '50th (Median)', '75th', '90th', '100th'],
+                'P/E': [f"{p:.2f}" for p in percentiles]
+            })
 
-# --- Assign Dynamic Target and Position ---
-assign_targets(assets, user_pref)
-assign_position_sizes(assets)
-assign_price_signals(assets, user_pref)
+            # Display results
+            st.write(f"**Current P/E:** {pe_current:.2f}")
+            st.write(f"**Percentile Rank (3 Years):** {pe_percentile_rank}th")
+            st.line_chart(hist['PE'])
+            st.write("**P/E Percentiles (3 Years):**")
+            st.dataframe(percentile_df)
 
-# --- Convert to DataFrame ---
-portfolio_df = get_portfolio_df(assets)
-
-# --- Display Table and Charts ---
-show_portfolio_table(portfolio_df)
-show_allocation_pie_chart(portfolio_df, total_thb)
-show_target_allocation_pie_chart(portfolio_df)
+    except Exception as e:
+        st.error(f"Error fetching data: {e}")

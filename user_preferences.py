@@ -7,7 +7,6 @@ from typing import Optional
 class UserPreference:
     password: str
     sheet_url: str
-    pe_timeframe_month: int
 
 def convert_to_csv_url(sheet_url: str) -> str:
     sheet_url = sheet_url.strip()
@@ -41,17 +40,6 @@ def get_user_preferences() -> UserPreference:
     password = st.sidebar.text_input(
         "Enter password for live data access:",
         type="password"
-    )
-
-    # PE Time Frame
-    st.sidebar.markdown("### 🧑‍💼 Investment Mode: Risk-Off/On")
-    pe_timeframe_month = st.sidebar.slider(
-        label="Set PE Time Frame (months)",
-        min_value=6,
-        max_value=60,
-        value=36,
-        step=6,
-        help="Statistical historical time frame"
     )
 
     return prefs

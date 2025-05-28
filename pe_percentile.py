@@ -6,7 +6,9 @@ from datetime import datetime, timedelta
 
 def get_pe_percentiles(symbol: str):
     try:
-        months = st.number_input("How many months?", min_value=6, max_value=120, value=36, step=6)
+        st.subheader("📋 P/E Ratio Percentiles")
+        
+        months = st.number_input("How many months?", min_value=6, max_value=120, value=6, step=6)
         
         end_date = datetime.today()
         start_date = end_date - timedelta(days=months * 30)

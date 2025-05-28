@@ -42,5 +42,11 @@ def get_user_preferences() -> UserPreference:
         type="password"
     )
 
+    # Create UserPreference object
+    prefs = UserPreference(
+        password=password,
+        sheet_url=sheet_url,
+    )
+    
     return prefs
 

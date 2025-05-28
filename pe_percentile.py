@@ -1,8 +1,5 @@
 #pe_percentile.py
-import yfinance as yf
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
+from fetch_yfinance import can_fetch_data
 
 def get_pe_percentiles(symbol: str):
     try:

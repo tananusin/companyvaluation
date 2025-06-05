@@ -6,7 +6,7 @@ def display_pe_percentiles(symbol: str):
     try:
         st.subheader("📋 P/E Ratio Percentiles")
         
-        months = st.number_input("How many months?", min_value=6, max_value=120, value=6, step=6)
+        months = st.number_input("How many months?", min_value=6, max_value=60, value=36, step=6)
 
         # Add button to trigger fetch
         if st.button("Fetch P/E Percentiles"):

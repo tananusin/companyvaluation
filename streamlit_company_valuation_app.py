@@ -41,17 +41,13 @@ with tab1: # --- PE Percentile Check Password and Fetch Data ---
 
 
 with tab2: # --- Financial Statements Load Asset Data ---
-    st.subheader("📊 Financial Statements")
-    
-    # --- Display Financial Metrics ---
+    st.subheader("📊 Financial Statements")    
     show_income_statement_table(df_financials)
     show_cf_statement_table(df_financials)
     show_balance_sheet_table(df_financials)
 
-with tab2: # --- Financial Statements Load Asset Data ---
-    st.subheader("📊 Default Risk")
-    
-    # --- Display Financial Metrics ---
+with tab3: # --- Financial Statements Load Asset Data ---
+    st.subheader("📊 Default Risk")    
     show_default_risk_table(df_financials)
 
 

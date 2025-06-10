@@ -15,8 +15,6 @@ class AssetData:
 
 @dataclass
 class CompanyFinancials:
-    company_name: str = ""
-    symbol: str = ""
     
     # Credit Rating
     credit_rating: Dict[int, Optional[str]] = field(default_factory=dict)

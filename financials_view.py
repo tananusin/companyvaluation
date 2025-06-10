@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 from asset_data import CompanyFinancials
-from typing import List
+from typing import Dict, Optional, List
 
 def calculate_ratios(financials: CompanyFinancials) -> Dict[str, Dict[int, Optional[float]]]:
     years = sorted(financials.ebit.keys())  # or any valid year source

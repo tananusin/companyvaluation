@@ -18,6 +18,7 @@ user_pref = get_user_preferences()
 tab1, tab2 = st.tabs(["📋 PE Percentiles", "📶 Default Risk"])
 
 with tab1: # --- PE Percentile Check Password and Fetch Data ---
+    st.subheader("📊 PE Percentiles")
     symbol = st.text_input("Enter stock symbol (e.g., AAPL)", value="AAPL")
 
     if user_pref.password == st.secrets["credentials"]["app_password"]:
@@ -32,6 +33,8 @@ with tab1: # --- PE Percentile Check Password and Fetch Data ---
 
 
 with tab2: # --- Financial Statements Load Asset Data ---
+    st.subheader("📊 Company Default Risk")
+    
     try:
         financials = load_financials_from_google_sheet(user_pref.sheet_url)
     except Exception:

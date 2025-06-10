@@ -39,6 +39,5 @@ except Exception:
     financials = load_financials_from_google_sheet(st.secrets["google_sheet"]["url"])
 
 # --- Display Financial Metrics ---
-st.subheader("📊 Company Financials")
 df_financials = get_financials_df(financials)
 show_financials_table(df_financials)

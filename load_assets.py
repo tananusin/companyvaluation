@@ -1,5 +1,6 @@
 # load_assets.py
 import pandas as pd
+import streamlit as st
 from asset_data import CompanyFinancials
 from typing import Optional
 
@@ -10,9 +11,17 @@ def clean_numeric(value: Optional[str]) -> Optional[float]:
     except ValueError:
         return None
 
-def load_financials_from_csv(csv_path: str) -> CompanyFinancials:
-    df = pd.read_csv(csv_path)
-    df.columns = df.columns.str.strip()
+def load_financials_from_google_sheet(sheet_url: str) -> CompanyFinancials:
+    # Adjust URL for CSV export
+    sheet_url = sheet_url.replace('/edit#gid=', '/gviz/tq?tqx=out:csv&gid=')
+
+    # Load and clean data
+    try:
+        df = pd.read_csv(sheet_url)
+        df.columns = df.columns.str.strip().str.lower()
+    except Exception as e:
+        st.error(f"❌ Failed to load Google Sheet: {e}")
+        st.stop()
 
     # Convert year columns to integers (assumes columns like '2020', '2021', etc.)
     year_cols = [int(col) for col in df.columns[1:]]
@@ -22,6 +31,9 @@ def load_financials_from_csv(csv_path: str) -> CompanyFinancials:
 
     for _, row in df.iterrows():
         metric = str(row[df.columns[0]]).strip().lower()
+        if not metric:
+            continue  # Skip blank rows
+
         for year in year_cols:
             raw_value = row[str(year)] if str(year) in row else None
 
@@ -47,5 +59,6 @@ def load_financials_from_csv(csv_path: str) -> CompanyFinancials:
                 financials.cash[year] = clean_numeric(raw_value)
 
     return financials
+
 
 

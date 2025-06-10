@@ -6,6 +6,7 @@ from user_preferences import get_user_preferences, UserPreference
 from fetch_yfinance import can_fetch_data
 from pe_percentile import display_pe_percentiles
 from load_assets import load_financials_from_google_sheet
+from financials_view import get_financials_df, show_financials_table
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="Company Valuation", layout="centered")
@@ -39,4 +40,5 @@ except Exception:
 
 # --- Display Financial Metrics ---
 st.subheader("📊 Company Financials")
-
+df_financials = get_financials_df(financials)
+show_financials_table(df_financials)

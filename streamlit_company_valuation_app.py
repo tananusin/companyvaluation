@@ -28,9 +28,6 @@ if user_pref.password == st.secrets["credentials"]["app_password"]:
 else:
     st.warning("🔒 Offline Mode: Using static data from Google Sheet.")
 
-# ---  ---
-st.subheader("📥 Loading Financial Data")
-
 # --- Financial Statements Load Asset Data ---
 try:
     financials = load_financials_from_google_sheet(user_pref.sheet_url)

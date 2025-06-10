@@ -16,7 +16,7 @@ user_pref = get_user_preferences()
 
 symbol = st.text_input("Enter stock symbol (e.g., AAPL)", value="AAPL")
 
-# --- Check Password and Fetch Data of PE Percentile ---
+# --- PE Percentile Check Password and Fetch Data ---
 if user_pref.password == st.secrets["credentials"]["app_password"]:
     st.success("🔓 Password Correct! Checking live data availability...")
     if can_fetch_data():  # ✅ Check fetch readiness
@@ -27,10 +27,10 @@ if user_pref.password == st.secrets["credentials"]["app_password"]:
 else:
     st.warning("🔒 Offline Mode: Using static data from Google Sheet.")
 
-# --- Financial Statements ---
+# ---  ---
 st.subheader("📥 Loading Financial Data")
 
-# --- Load Asset Data ---
+# --- Financial Statements Load Asset Data ---
 try:
     financials = load_financials_from_google_sheet(user_pref.sheet_url)
 except Exception:

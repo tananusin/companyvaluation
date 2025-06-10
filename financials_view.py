@@ -29,12 +29,16 @@ def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
 def show_financials_table(df: pd.DataFrame):
     # 👇 Hardcode the metrics (rows) you want to show
     rows_to_show = [
+        "Credit Rating",
+        "Inventory",
+        "Current Asset",
+        "Current Debt",        
         "EBIT",
         "Interest",
-        "Net Profit",
+        "OCF",
         "Cash",
-        "Current Asset",
-        "Current Debt",
+        "Net CF",
+        "Net Profit",
     ]
 
     # Filter DataFrame

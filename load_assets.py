@@ -1,53 +1,58 @@
 # load_assets.py
 import pandas as pd
-import streamlit as st
-from asset_data import AssetData
+from asset_data import CompanyFinancials
+from typing import Optional
 
-def parse_yield(value):
-    """Converts yield from string with '%' to float."""
+def clean_numeric(value: Optional[str]) -> Optional[float]:
+    """Converts strings like '1,234,567' to float."""
     try:
-        if isinstance(value, str) and "%" in value:
-            return float(value.replace("%", "").strip()) / 100
-        return float(value) if pd.notnull(value) else 0.0
-    except (ValueError, TypeError):
-        return 0.0
+        return float(str(value).replace(",", "").strip()) if pd.notnull(value) else None
+    except ValueError:
+        return None
 
-def load_assets_from_google_sheet(sheet_url: str) -> list[AssetData]:
-    # Adjust URL for CSV export
-    sheet_url = sheet_url.replace('/edit#gid=', '/gviz/tq?tqx=out:csv&gid=')
+def load_financials_from_csv(csv_path: str, company_name: str = "Unnamed", symbol: str = "") -> CompanyFinancials:
+    df = pd.read_csv(csv_path)
+    df.columns = df.columns.str.strip()
 
-    # Load and clean data
-    try:
-        df = pd.read_csv(sheet_url)
-        df.columns = df.columns.str.strip().str.lower()
-    except Exception as e:
-        st.error(f"❌ Failed to load Google Sheet: {e}")
-        st.stop()
+    # Convert year columns to int
+    year_cols = [int(col) for col in df.columns[1:]]
 
-    # Validate columns
-    required_cols = {"name", "symbol", "currency", "shares", "price", "fx", "type", "52w_high", "52w_low", "3y_low", "pe", "yield"}
-    if not required_cols.issubset(df.columns):
-        st.error(f"Missing columns in Google Sheet. Required: {required_cols}")
-        st.write("Loaded columns:", df.columns.tolist())
-        st.stop()
+    financials = CompanyFinancials(company_name=company_name, symbol=symbol)
 
-    # Create AssetData objects
-    assets = [
-        AssetData(
-            name=row["name"],
-            symbol=row["symbol"],
-            currency=row["currency"],
-            shares=row["shares"],
-            price=row["price"] if pd.notnull(row["price"]) else 0.0,
-            fx_rate=row["fx"] if pd.notnull(row["fx"]) else 0.0,
-            asset_type=row["type"],
-            peak_1y=row["52w_high"] if pd.notnull(row["52w_high"]) else 0.0,
-            trough_1y=row["52w_low"] if pd.notnull(row["52w_low"]) else 0.0,
-            trough_3y=row["3y_low"] if pd.notnull(row["3y_low"]) else 0.0,
-            pe_ratio=row["pe"] if pd.notnull(row["pe"]) else 0.0,
-            dividend_yield=parse_yield(row["yield"])                
-        )
-        for _, row in df.iterrows()
-    ]
+    for _, row in df.iterrows():
+        metric = str(row[df.columns[0]]).strip().lower()
+        if metric == "credit rating":
+            for year in year_cols:
+                value = row[str(year)].strip() if pd.notnull(row[str(year)]) else None
+                financials.credit_rating[year] = value
+        elif metric == "inventory":
+            for year in year_cols:
+                financials.inventory[year] = clean_numeric(row[str(year)])
+        elif metric == "current asset":
+            for year in year_cols:
+                financials.current_asset[year] = clean_numeric(row[str(year)])
+        elif metric == "current debt":
+            for year in year_cols:
+                financials.current_debt[year] = clean_numeric(row[str(year)])
+        elif metric == "ebit":
+            for year in year_cols:
+                financials.ebit[year] = clean_numeric(row[str(year)])
+        elif metric == "interest":
+            for year in year_cols:
+                financials.interest[year] = clean_numeric(row[str(year)])
+        elif metric == "net profit":
+            for year in year_cols:
+                financials.net_profit[year] = clean_numeric(row[str(year)])
+        elif metric == "ocf":
+            for year in year_cols:
+                financials.ocf[year] = clean_numeric(row[str(year)])
+        elif metric == "net cf":
+            for year in year_cols:
+                financials.net_cf[year] = clean_numeric(row[str(year)])
+        elif metric == "cash":
+            for year in year_cols:
+                financials.cash[year] = clean_numeric(row[str(year)])
+        # Add more mappings here if needed
 
-    return assets
+    return financials
+

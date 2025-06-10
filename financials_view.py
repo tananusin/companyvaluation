@@ -6,8 +6,22 @@ import streamlit as st
 from asset_data import CompanyFinancials
 from typing import List
 
+def calculate_ratios(financials: CompanyFinancials) -> Dict[str, Dict[int, Optional[float]]]:
+    years = sorted(financials.ebit.keys())  # or any valid year source
+
+    return {
+        "Quick Ratio": {y: financials.quick_ratio(y) for y in years},
+        "Current Ratio": {y: financials.current_ratio(y) for y in years},
+        "ICR": {y: financials.icr(y) for y in years},
+        "Cash Coverage": {y: financials.cash_coverage(y) for y in years},
+        "ROE": {y: financials.roe(y) for y in years},
+        "DE Ratio": {y: financials.de_ratio(y) for y in years},
+    }
+
+
 def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
-    # Organize each metric as a row
+    ratios = calculate_ratios(financials)
+    
     data = {
         "EBIT": financials.ebit,
         "Interest": financials.interest,
@@ -20,14 +34,8 @@ def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
         "Current Debt": financials.current_debt,
         "Credit Rating": financials.credit_rating,
         "Equity": financials.equity,
-        "Debt": financials.debt,
-        
-        "Quick Ratio": financials.quick_ratio,
-        "Current Ratio": financials.current_ratio,
-        "ICR": financials.icr,
-        "Cash Coverage": financials.cash_coverage,
-        "ROE": financials.roe,
-        "DE Ratio": financials.de_ratio,
+        "Debt": financials.debt, 
+        **ratios,
     }
 
     # Convert to DataFrame (metrics as rows, years as columns)

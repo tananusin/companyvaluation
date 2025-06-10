@@ -19,6 +19,8 @@ def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
         "Current Asset": financials.current_asset,
         "Current Debt": financials.current_debt,
         "Credit Rating": financials.credit_rating,
+        "Equity": financials.equity,
+        "Debt": financials.debt,
     }
 
     # Convert to DataFrame (metrics as rows, years as columns)
@@ -39,6 +41,8 @@ def show_financials_table(df: pd.DataFrame):
         "Cash",
         "Net CF",
         "Net Profit",
+        "Equity",
+        "Debt",
     ]
 
     # Filter DataFrame

@@ -21,6 +21,13 @@ def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
         "Credit Rating": financials.credit_rating,
         "Equity": financials.equity,
         "Debt": financials.debt,
+        
+        "Quick Ratio": financials.quick_ratio,
+        "Current Ratio": financials.current_ratio,
+        "ICR": financials.icr,
+        "Cash Coverage": financials.cash_coverage,
+        "ROE": financials.roe,
+        "DE Ratio": financials.de_ratio,
     }
 
     # Convert to DataFrame (metrics as rows, years as columns)
@@ -90,4 +97,26 @@ def show_balance_sheet_table(df: pd.DataFrame):
     # Display in Streamlit
     st.dataframe(df_filtered.style.format(format_val))
 
+def show_default_risk_table(df: pd.DataFrame):
+    st.markdown("Default Risk")
+    rows_to_show = [
+        "Quick Ratio",
+        "Current Ratio",
+        "Cash Coverage",
+        "ICR",        
+        "Cash Coverage",
+        "ROE",
+    ]
+
+    # Filter DataFrame
+    df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
+
+    # Format values
+    def format_val(val):
+        if isinstance(val, (int, float)):
+            return f"{val:,.2f}"
+        return val if val else "-"
+
+    # Display in Streamlit
+    st.dataframe(df_filtered.style.format(format_val))
 

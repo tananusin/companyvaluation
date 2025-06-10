@@ -57,6 +57,10 @@ def load_financials_from_google_sheet(sheet_url: str) -> CompanyFinancials:
                 financials.net_cf[year] = clean_numeric(raw_value)
             elif metric == "cash":
                 financials.cash[year] = clean_numeric(raw_value)
+            elif metric == "equity":
+                financials.equity[year] = clean_numeric(raw_value)
+            elif metric == "debt":
+                financials.debt[year] = clean_numeric(raw_value)
 
     return financials
 

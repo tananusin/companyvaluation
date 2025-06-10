@@ -28,19 +28,52 @@ def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
     df = df.reindex(sorted(df.columns), axis=1)  # sort years
     return df
 
-def show_financials_table(df: pd.DataFrame):
+def show_income_statement_table(df: pd.DataFrame):
+    # 👇 Hardcode the metrics (rows) you want to show
+    rows_to_show = [      
+        "EBIT",
+        "Interest",
+        "Net Profit",
+    ]
+
+    # Filter DataFrame
+    df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
+
+    # Format values
+    def format_val(val):
+        if isinstance(val, (int, float)):
+            return f"{val:,.0f}"
+        return val if val else "-"
+
+    # Display in Streamlit
+    st.dataframe(df_filtered.style.format(format_val))
+
+def show_cf_statement_table(df: pd.DataFrame):
     # 👇 Hardcode the metrics (rows) you want to show
     rows_to_show = [
-        "Credit Rating",
+        "OCF",
+        "Net CF",
+    ]
+
+    # Filter DataFrame
+    df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
+
+    # Format values
+    def format_val(val):
+        if isinstance(val, (int, float)):
+            return f"{val:,.0f}"
+        return val if val else "-"
+
+    # Display in Streamlit
+    st.dataframe(df_filtered.style.format(format_val))
+
+def show_balance_sheet_table(df: pd.DataFrame):
+    # 👇 Hardcode the metrics (rows) you want to show
+    rows_to_show = [
+        "Cash",
         "Inventory",
         "Current Asset",
         "Current Debt",        
-        "EBIT",
-        "Interest",
-        "OCF",
-        "Cash",
-        "Net CF",
-        "Net Profit",
         "Equity",
         "Debt",
     ]
@@ -56,4 +89,5 @@ def show_financials_table(df: pd.DataFrame):
 
     # Display in Streamlit
     st.dataframe(df_filtered.style.format(format_val))
+
 

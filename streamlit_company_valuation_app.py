@@ -15,7 +15,7 @@ st.title("🗂️ Company Valuation")
 # --- User Preferences ---
 user_pref = get_user_preferences()
 
-tab1, tab2 = st.tabs(["📋 PE Percentile", "📶 Default Risk"])
+tab1, tab2 = st.tabs(["📋 PE Percentiles", "📶 Default Risk"])
 
 with tab1: # --- PE Percentile Check Password and Fetch Data ---
     symbol = st.text_input("Enter stock symbol (e.g., AAPL)", value="AAPL")

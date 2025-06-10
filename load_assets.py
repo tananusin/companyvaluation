@@ -10,14 +10,12 @@ def clean_numeric(value: Optional[str]) -> Optional[float]:
     except ValueError:
         return None
 
-def load_financials_from_csv(csv_path: str, company_name: str = "Unnamed", symbol: str = "") -> CompanyFinancials:
+def load_financials_from_csv(csv_path: str) -> CompanyFinancials:
     df = pd.read_csv(csv_path)
     df.columns = df.columns.str.strip()
 
     # Convert year columns to int
     year_cols = [int(col) for col in df.columns[1:]]
-
-    financials = CompanyFinancials(company_name=company_name, symbol=symbol)
 
     for _, row in df.iterrows():
         metric = str(row[df.columns[0]]).strip().lower()

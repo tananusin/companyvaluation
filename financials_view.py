@@ -47,6 +47,6 @@ def show_financials_table(df: pd.DataFrame):
         return val if val else "-"
 
     # Display in Streamlit
-    st.subheader("📊 Selected Financial Metrics")
+
     st.dataframe(df_filtered.style.format(format_val))
 

@@ -5,6 +5,7 @@ from asset_data import AssetData
 from user_preferences import get_user_preferences, UserPreference
 from fetch_yfinance import can_fetch_data
 from pe_percentile import display_pe_percentiles
+from load_assets import load_financials_from_google_sheet
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="Company Valuation", layout="centered")
@@ -15,7 +16,7 @@ user_pref = get_user_preferences()
 
 symbol = st.text_input("Enter stock symbol (e.g., AAPL)", value="AAPL")
 
-# --- Check Password and Fetch Data ---
+# --- Check Password and Fetch Data of PE Percentile ---
 if user_pref.password == st.secrets["credentials"]["app_password"]:
     st.success("🔓 Password Correct! Checking live data availability...")
     if can_fetch_data():  # ✅ Check fetch readiness
@@ -26,3 +27,43 @@ if user_pref.password == st.secrets["credentials"]["app_password"]:
 else:
     st.warning("🔒 Offline Mode: Using static data from Google Sheet.")
 
+# --- Financial Statements ---
+st.subheader("📥 Loading Financial Data")
+
+# --- Load Asset Data ---
+try:
+    financials = load_financials_from_google_sheet(user_pref.sheet_url)
+except Exception:
+    st.error("❌ Failed to load data from the provided Google Sheet. Using default sheet instead.")
+    financials = load_financials_from_google_sheet(st.secrets["google_sheet"]["url"])
+
+# --- Display Financial Metrics ---
+st.subheader("📊 Company Financials")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("**EBIT**")
+    st.write(financials.ebit)
+
+    st.markdown("**OCF**")
+    st.write(financials.ocf)
+
+    st.markdown("**Inventory**")
+    st.write(financials.inventory)
+
+    st.markdown("**Net Profit**")
+    st.write(financials.net_profit)
+
+with col2:
+    st.markdown("**Interest**")
+    st.write(financials.interest)
+
+    st.markdown("**Cash**")
+    st.write(financials.cash)
+
+    st.markdown("**Credit Rating**")
+    st.write(financials.credit_rating)
+
+    st.markdown("**Net CF**")
+    st.write(financials.net_cf)

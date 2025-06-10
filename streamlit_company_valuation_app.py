@@ -34,7 +34,7 @@ with tab1: # --- PE Percentile Check Password and Fetch Data ---
                 pe_p25, pe_p75 = display_pe_percentiles(symbol)
         else:
             st.error("❌ Unable to fetch live data. Falling back to static data.")
-    else:https://github.com/tananusin/companyvaluation/blob/main/streamlit_company_valuation_app.py
+    else:
         st.warning("🔒 Offline Mode: Using static data from Google Sheet.")
 
 

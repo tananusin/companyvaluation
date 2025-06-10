@@ -33,4 +33,6 @@ class CompanyFinancials:
     inventory: Dict[int, Optional[float]] = field(default_factory=dict)
     current_asset: Dict[int, Optional[float]] = field(default_factory=dict)
     current_debt: Dict[int, Optional[float]] = field(default_factory=dict)
+    equity: Dict[int, Optional[float]] = field(default_factory=dict)
+    debt: Dict[int, Optional[float]] = field(default_factory=dict)
     

@@ -33,7 +33,7 @@ with tab1: # --- PE Percentile Check Password and Fetch Data ---
 
 
 with tab2: # --- Financial Statements Load Asset Data ---
-    st.subheader("📊 Company Default Risk")
+    st.subheader("📊 Default Risk")
     
     try:
         financials = load_financials_from_google_sheet(user_pref.sheet_url)

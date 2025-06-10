@@ -40,30 +40,3 @@ except Exception:
 # --- Display Financial Metrics ---
 st.subheader("📊 Company Financials")
 
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("**EBIT**")
-    st.write(financials.ebit)
-
-    st.markdown("**OCF**")
-    st.write(financials.ocf)
-
-    st.markdown("**Inventory**")
-    st.write(financials.inventory)
-
-    st.markdown("**Net Profit**")
-    st.write(financials.net_profit)
-
-with col2:
-    st.markdown("**Interest**")
-    st.write(financials.interest)
-
-    st.markdown("**Cash**")
-    st.write(financials.cash)
-
-    st.markdown("**Credit Rating**")
-    st.write(financials.credit_rating)
-
-    st.markdown("**Net CF**")
-    st.write(financials.net_cf)

@@ -23,7 +23,7 @@ except Exception:
 
 df_financials = get_financials_df(financials)
 
-tab1, tab2, tab3 = st.tabs(["📋 PE Percentiles", "📶 Financials", "Default"])
+tab1, tab2, tab3 = st.tabs(["📋 PE Percentiles", "📶 Financials", "Default Risk"])
 
 with tab1: # --- PE Percentile Check Password and Fetch Data ---
     st.subheader("📊 PE Percentiles")

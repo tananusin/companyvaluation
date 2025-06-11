@@ -10,7 +10,7 @@ from financials_view import get_financials_df, show_income_statement_table, show
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="Company Valuation", layout="centered")
-st.title("🗂️ Company Valuation")
+st.title("🏢 Company Valuation")
 
 # --- User Preferences ---
 user_pref = get_user_preferences()

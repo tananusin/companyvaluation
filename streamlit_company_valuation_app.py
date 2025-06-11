@@ -23,10 +23,10 @@ except Exception:
 
 df_financials = get_financials_df(financials)
 
-tab1, tab2, tab3 = st.tabs(["📋 PE Percentiles", "📶 Financials", "Default Risk"])
+tab1, tab2, tab3 = st.tabs(["🧮 PE Percentiles", "🧾 Financials", "🚫 Default Risk"])
 
 with tab1: # --- PE Percentile Check Password and Fetch Data ---
-    st.subheader("📊 PE Percentiles")
+    st.subheader("🧮 PE Percentiles")
     symbol = st.text_input("Enter stock symbol (e.g., AAPL)", value="AAPL")
 
     if user_pref.password == st.secrets["credentials"]["app_password"]:
@@ -41,13 +41,13 @@ with tab1: # --- PE Percentile Check Password and Fetch Data ---
 
 
 with tab2: # --- Financial Statements Load Asset Data ---
-    st.subheader("📊 Financial Statements")    
+    st.subheader("🧾 Financial Statements")    
     show_income_statement_table(df_financials)
     show_cf_statement_table(df_financials)
     show_balance_sheet_table(df_financials)
 
 with tab3: # --- Financial Statements Load Asset Data ---
-    st.subheader("📊 Default Risk")    
+    st.subheader("🚫 Default Risk")    
     show_default_risk_table(df_financials)
 
 

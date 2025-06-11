@@ -44,7 +44,7 @@ def get_financials_df(financials: CompanyFinancials) -> pd.DataFrame:
     return df
 
 def show_income_statement_table(df: pd.DataFrame):
-    st.markdown("###💰 Income Statement")
+    st.markdown("### 💰 Income Statement")
     rows_to_show = [      
         "EBIT",
         "Interest",
@@ -64,7 +64,7 @@ def show_income_statement_table(df: pd.DataFrame):
     st.dataframe(df_filtered.style.format(format_val))
 
 def show_cf_statement_table(df: pd.DataFrame):
-    st.markdown("###💵 Cash Flow Statement")
+    st.markdown("### 💵 Cash Flow Statement")
     rows_to_show = [
         "OCF",
         "Net CF",
@@ -83,7 +83,7 @@ def show_cf_statement_table(df: pd.DataFrame):
     st.dataframe(df_filtered.style.format(format_val))
 
 def show_balance_sheet_table(df: pd.DataFrame):
-    st.markdown("###📄 Balance Sheet")
+    st.markdown("### 📄 Balance Sheet")
     rows_to_show = [
         "Cash",
         "Inventory",

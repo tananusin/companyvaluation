@@ -108,7 +108,7 @@ def show_balance_sheet_table(df: pd.DataFrame):
 def show_financial_statements_table(df: pd.DataFrame):
     show_income_statement_table(df)
     show_cf_statement_table(df)
-    show_balance_sheet_table(df)
+    ##show_balance_sheet_table(df)
 
 def show_default_risk_table(df: pd.DataFrame):
     rows_to_show = [

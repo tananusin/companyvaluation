@@ -5,7 +5,8 @@ from asset_data import AssetData
 from user_preferences import get_user_preferences, UserPreference
 from load_assets import load_financials_from_google_sheet
 from create_dataframe import get_financials_df
-from financials_view import show_financial_statements_table, show_default_risk_table
+from financials_view import show_financial_statements_table
+from default_risk import show_default_risk_table
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="Company Valuation", layout="centered")

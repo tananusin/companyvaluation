@@ -4,7 +4,8 @@ import pandas as pd
 from asset_data import AssetData
 from user_preferences import get_user_preferences, UserPreference
 from load_assets import load_financials_from_google_sheet
-from financials_view import get_financials_df, show_financial_statements_table, show_default_risk_table
+from create_dataframe import get_financials_df
+from financials_view import show_financial_statements_table, show_default_risk_table
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="Company Valuation", layout="centered")

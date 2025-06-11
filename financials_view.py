@@ -105,6 +105,11 @@ def show_balance_sheet_table(df: pd.DataFrame):
     # Display in Streamlit
     st.dataframe(df_filtered.style.format(format_val))
 
+def show_financial_statements_table(df: pd.DataFrame):
+    show_income_statement_table(df_financials)
+    show_cf_statement_table(df_financials)
+    show_balance_sheet_table(df_financials)
+
 def show_default_risk_table(df: pd.DataFrame):
     rows_to_show = [
         "Quick Ratio",

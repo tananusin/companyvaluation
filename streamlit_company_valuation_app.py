@@ -6,7 +6,7 @@ from user_preferences import get_user_preferences, UserPreference
 from fetch_yfinance import can_fetch_data
 from pe_percentile import display_pe_percentiles
 from load_assets import load_financials_from_google_sheet
-from financials_view import get_financials_df, show_balance_sheet_table, show_default_risk_table
+from financials_view import get_financials_df, show_financial_statements_table, show_default_risk_table
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="Company Valuation", layout="centered")
@@ -42,7 +42,7 @@ with tab1: # --- PE Percentile Check Password and Fetch Data ---
 
 with tab2: # --- Financial Statements Load Asset Data ---
     st.subheader("🧾 Financial Statements")    
-    show_balance_sheet_table(df_financials)
+    show_financial_statements_table(df_financials)
 
 with tab3: # --- Financial Statements Load Asset Data ---
     st.subheader("🚫 Default Risk")    

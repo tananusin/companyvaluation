@@ -106,7 +106,6 @@ def show_balance_sheet_table(df: pd.DataFrame):
     st.dataframe(df_filtered.style.format(format_val))
 
 def show_default_risk_table(df: pd.DataFrame):
-    st.markdown("Default Risk")
     rows_to_show = [
         "Quick Ratio",
         "Current Ratio",

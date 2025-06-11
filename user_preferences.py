@@ -36,9 +36,9 @@ def get_user_preferences() -> UserPreference:
         sheet_url = st.secrets["google_sheet"]["url"]
 
     # Password input
-    st.sidebar.markdown("### 🔑 Switch to Live Data")
+    st.sidebar.markdown("### 🔑 Password")
     password = st.sidebar.text_input(
-        "Enter password for live data access:",
+        "Enter password:",
         type="password"
     )
 

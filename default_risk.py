@@ -26,6 +26,7 @@ def show_default_risk_table(df: pd.DataFrame):
     st.dataframe(df_filtered.style.format(format_val))
 
 def show_supplier_debt_table(df: pd.DataFrame):
+    st.markdown("📄 Supplier Debt")
     rows_to_show = [
         "Inventory",
         "Current Asset",

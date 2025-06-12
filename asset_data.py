@@ -63,11 +63,11 @@ class CompanyFinancials:
             e = self.ebit.get(year)
             i = self.interest.get(year)
             if e is not None and i and i != 0:
-                return e / i
+                return e / (-i)  # Negate if interest is negative
         except:
             pass
         return None
-
+        
     def cashflow_coverage(self, year: int) -> Optional[float]:
         """
         Calculates Cashflow Coverage Ratio = (OCF + Interest) / Interest
@@ -76,7 +76,7 @@ class CompanyFinancials:
             ocf = self.ocf.get(year)
             i = self.interest.get(year)
             if ocf is not None and i and i != 0:
-                return (ocf + i) / i
+                return (ocf - i) / (-i)  # Use -i consistently
         except:
             pass
         return None

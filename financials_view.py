@@ -65,7 +65,7 @@ def show_balance_sheet_table(df: pd.DataFrame):
     # Display in Streamlit
     st.dataframe(df_filtered.style.format(format_val))
 
-def show_financial_statements_table(df: pd.DataFrame):
+def show_financial_statements_tables(df: pd.DataFrame):
     show_income_statement_table(df)
     show_cf_statement_table(df)
     show_balance_sheet_table(df)

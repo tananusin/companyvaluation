@@ -23,14 +23,14 @@ except Exception:
 
 df_financials = get_financials_df(financials)
 
-tab1, tab2 = st.tabs(["🧾 Financials", "🚫 Default Risk"])
+tab1, tab2 = st.tabs(["🧾 Financials", "🕒 Default Risk"])
 
 with tab1: # --- Financial Statements Load Asset Data ---
     st.subheader("🧾 Financial Statements")    
     show_financial_statements_tables(df_financials)
 
 with tab2: # --- Financial Statements Load Asset Data ---
-    st.subheader("🚫 Default Risk")    
+    st.subheader("🕒 Default Risk")    
     show_default_risk_tables(df_financials)
 
 

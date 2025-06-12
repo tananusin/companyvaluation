@@ -6,9 +6,9 @@ import pandas as pd
 def show_supplier_debt_table(df: pd.DataFrame):
     st.markdown("📦 Supplier Payment")
     rows_to_show = [
+        "Current Debt",
         "Inventory",
         "Current Asset",
-        "Current Debt",
         "Current Ratio",
         "Quick Ratio",
     ]
@@ -28,8 +28,8 @@ def show_supplier_debt_table(df: pd.DataFrame):
 def show_financier_debt_table(df: pd.DataFrame):
     st.markdown("🏦 Financier Interest Payment")
     rows_to_show = [
-        "EBIT",
         "Interest",
+        "EBIT",
         "OCF",
         "ICR",
         "CF Coverage",

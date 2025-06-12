@@ -50,6 +50,7 @@ def show_financier_debt_table(df: pd.DataFrame):
 def show_debt_structure_table(df: pd.DataFrame):
     st.markdown("📄 Long-term Debt Structure")
     rows_to_show = [
+        "Net CF",
         "Cash",
         "Equity",
         "Debt",

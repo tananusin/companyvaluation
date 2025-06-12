@@ -68,12 +68,15 @@ class CompanyFinancials:
             pass
         return None
 
-    def cash_coverage(self, year: int) -> Optional[float]:
+    def cashflow_coverage(self, year: int) -> Optional[float]:
+        """
+        Calculates Cashflow Coverage Ratio = (OCF + Interest) / Interest
+        """
         try:
-            c = self.cash.get(year)
+            ocf = self.ocf.get(year)
             i = self.interest.get(year)
-            if c is not None and i and i != 0:
-                return c / i
+            if ocf is not None and i and i != 0:
+                return (ocf + i) / i
         except:
             pass
         return None

@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 
 def show_supplier_debt_table(df: pd.DataFrame):
-    st.markdown("📄 Supplier Debt")
+    st.markdown("📦 Supplier Debt")
     rows_to_show = [
         "Inventory",
         "Current Asset",
@@ -26,7 +26,7 @@ def show_supplier_debt_table(df: pd.DataFrame):
     st.dataframe(df_filtered.style.format(format_val))
 
 def show_financier_debt_table(df: pd.DataFrame):
-    st.markdown("📄 Financier Debt")
+    st.markdown("🏦 Financier Debt")
     rows_to_show = [
         "EBIT",
         "Interest",
@@ -48,7 +48,7 @@ def show_financier_debt_table(df: pd.DataFrame):
     st.dataframe(df_filtered.style.format(format_val))
 
 def show_debt_structure_table(df: pd.DataFrame):
-    st.markdown("📄 Long-term Debt Structure")
+    st.markdown("⛓️ Long-term Debt Structure")
     rows_to_show = [
         "Net CF",
         "Cash",

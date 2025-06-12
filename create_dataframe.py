@@ -12,7 +12,7 @@ def calculate_ratios(financials: CompanyFinancials) -> Dict[str, Dict[int, Optio
         "Quick Ratio": {y: financials.quick_ratio(y) for y in years},
         "Current Ratio": {y: financials.current_ratio(y) for y in years},
         "ICR": {y: financials.icr(y) for y in years},
-        "Cash Coverage": {y: financials.cash_coverage(y) for y in years},
+        "CF Coverage": {y: financials.cashflow_coverage(y) for y in years},
         "ROE": {y: financials.roe(y) for y in years},
         "DE Ratio": {y: financials.de_ratio(y) for y in years},
     }

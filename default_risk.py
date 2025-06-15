@@ -3,7 +3,7 @@
 import streamlit as st
 import pandas as pd
 
-show_supplier_debt_table(df: pd.DataFrame):
+def show_supplier_debt_table(df: pd.DataFrame):
     st.markdown("📦 Supplier Payment")
     rows_to_show = [
         "Current Debt",

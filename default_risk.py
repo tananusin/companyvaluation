@@ -108,23 +108,61 @@ def show_debt_structure_table(df: pd.DataFrame):
         "DE Ratio",
     ]
 
-    # Filter DataFrame
+    # Filter the DataFrame to required rows
     df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
 
-    # Custom formatting per row
+    # Format values: ROE as percentage, others as numbers
+    def format_values(val, row_name):
+        if isinstance(val, (int, float)):
+            if row_name == "ROE":
+                return f"{val * 100:.2f}%"
+            else:
+                return f"{val:,.2f}"
+        return "-"
+
+    # Build a formatted DataFrame
     def apply_formatting(df: pd.DataFrame):
         styled = df.style
 
-        # Format numeric values
+        # Apply formatting row-by-row
         for row in df.index:
             if row == "ROE":
-                styled = styled.format({col: lambda v: f"{v * 100:.2f}%" for col in df.columns}, subset=pd.IndexSlice["ROE", :])
+                styled = styled.format({col: lambda v: f"{v * 100:.2f}%" for col in df.columns}, subset=pd.IndexSlice[row, :])
             else:
                 styled = styled.format({col: "{:,.2f}" for col in df.columns}, subset=pd.IndexSlice[row, :])
 
         return styled
 
-    st.dataframe(apply_formatting(df_filtered))
+    # Apply conditional font color to DE Ratio based on ROE
+    def color_de_ratio(val, roe_val):
+        if pd.isna(val) or pd.isna(roe_val):
+            return ""
+        if roe_val > 0.20:
+            return "color: red" if val > 2.5 else "color: green"
+        elif 0.10 <= roe_val <= 0.20:
+            return "color: red" if val > 2 else "color: green"
+        else:  # ROE < 10%
+            return "color: red" if val > 1 else "color: green"
+
+    # Apply DE Ratio coloring using a custom function
+    def apply_de_color(df: pd.DataFrame, styled: pd.io.formats.style.Styler):
+        de_row = df.loc["DE Ratio"]
+        roe_row = df.loc["ROE"]
+        color_df = pd.DataFrame("", index=df.index, columns=df.columns)
+
+        for col in df.columns:
+            roe_val = roe_row[col]
+            de_val = de_row[col]
+            color_df.loc["DE Ratio", col] = color_de_ratio(de_val, roe_val)
+
+        return styled.apply(lambda _: color_df, axis=None)
+
+    # Format values and apply conditional coloring
+    styled = apply_formatting(df_filtered)
+    styled = apply_de_color(df_filtered, styled)
+
+    # Display in Streamlit
+    st.dataframe(styled)
 
 def show_cash_level_table(df: pd.DataFrame):
     st.markdown("💵 Cash Level")

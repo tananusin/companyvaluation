@@ -65,14 +65,39 @@ def show_financier_debt_table(df: pd.DataFrame):
     # Filter DataFrame
     df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
 
-    # Format values
+    # Format numbers
     def format_val(val):
         if isinstance(val, (int, float)):
             return f"{val:,.2f}"
         return val if val else "-"
 
-    # Display in Streamlit
-    st.dataframe(df_filtered.style.format(format_val))
+    # Conditional font color logic
+    def highlight_ratio(val, row_name):
+        if row_name == "ICR":
+            if val >= 2:
+                return "color: green"
+            elif val < 1.5:
+                return "color: red"
+        elif row_name == "CF Coverage":
+            if val >= 1:
+                return "color: green"
+            else:
+                return "color: red"
+        return ""
+
+    # Apply style based on row and value
+    def apply_color_formatting(df_style):
+        return df_style.apply(
+            lambda row: [highlight_ratio(v, row.name) for v in row],
+            axis=1
+        )
+
+    # Display styled DataFrame
+    st.dataframe(
+        df_filtered.style
+            .format(format_val)
+            .pipe(apply_color_formatting)
+    )
 
 def show_debt_structure_table(df: pd.DataFrame):
     st.markdown("⛓️ Long-term Debt Structure")

@@ -180,8 +180,25 @@ def show_cash_level_table(df: pd.DataFrame):
             return f"{val:,.2f}"
         return val if val else "-"
 
-    # Display in Streamlit
-    st.dataframe(df_filtered.style.format(format_val))
+    # Conditional red font for negative Net CF
+    def color_net_cf(val, row_name):
+        if row_name == "Net CF" and isinstance(val, (int, float)) and val < 0:
+            return "color: red"
+        return ""
+
+    # Apply font color row-wise
+    def apply_color_formatting(df_style):
+        return df_style.apply(
+            lambda row: [color_net_cf(val, row.name) for val in row],
+            axis=1
+        )
+
+    # Display with formatting
+    st.dataframe(
+        df_filtered.style
+            .format(format_val)
+            .pipe(apply_color_formatting)
+    )
 
 def show_default_risk_tables(df: pd.DataFrame):
     show_supplier_debt_table(df)

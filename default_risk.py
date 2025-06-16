@@ -111,21 +111,20 @@ def show_debt_structure_table(df: pd.DataFrame):
     # Filter DataFrame
     df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
 
-    # Custom formatting function
-    def format_val(val, row_name):
-        if isinstance(val, (int, float)):
-            if row_name == "ROE":
-                return f"{val * 100:.2f}%"
+    # Custom formatting per row
+    def apply_formatting(df: pd.DataFrame):
+        styled = df.style
+
+        # Format numeric values
+        for row in df.index:
+            if row == "ROE":
+                styled = styled.format({col: lambda v: f"{v * 100:.2f}%" for col in df.columns}, subset=pd.IndexSlice["ROE", :])
             else:
-                return f"{val:,.2f}"
-        return val if val else "-"
+                styled = styled.format({col: "{:,.2f}" for col in df.columns}, subset=pd.IndexSlice[row, :])
 
-    # Wrapper for pandas Styler to apply formatting per row
-    def format_dataframe(df):
-        return df.style.format(lambda val, row=row: format_val(val, row), axis=0)
+        return styled
 
-    # Apply formatting and display
-    st.dataframe(format_dataframe(df_filtered))
+    st.dataframe(apply_formatting(df_filtered))
 
 def show_cash_level_table(df: pd.DataFrame):
     st.markdown("💵 Cash Level")

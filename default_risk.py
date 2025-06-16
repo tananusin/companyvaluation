@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 
 def show_credit_rating_table(df: pd.DataFrame):
-    st.markdown("💵 Official Credit Rating")
+    st.markdown("⚖️ Official Credit Rating")
     rows_to_show = ["Credit Rating",]
 
     # Filter DataFrame

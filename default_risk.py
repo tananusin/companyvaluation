@@ -6,6 +6,20 @@ import pandas as pd
 import pandas as pd
 import streamlit as st
 
+def show_credit_rating_table(df: pd.DataFrame):
+    st.markdown("💵 Official Credit Rating")
+    rows_to_show = ["Credit Rating",]
+
+    # Filter DataFrame
+    df_filtered = df.loc[[row for row in rows_to_show if row in df.index]]
+
+    # Format values (string fallback for missing values)
+    def format_val(val):
+        return val if val else "-"
+
+    # Display in Streamlit
+    st.dataframe(df_filtered.style.format(format_val))
+
 def show_supplier_debt_table(df: pd.DataFrame):
     st.markdown("📦 Supplier Payment")
     rows_to_show = [
@@ -201,6 +215,7 @@ def show_cash_level_table(df: pd.DataFrame):
     )
 
 def show_default_risk_tables(df: pd.DataFrame):
+    show_credit_rating_table(df)
     show_supplier_debt_table(df)
     show_financier_debt_table(df)
     show_debt_structure_table(df)
